@@ -66,6 +66,11 @@ return [
 
         'sftp' => [
             'driver' => 'sftp',
+            /*'host' => env('SFTP_HOST'),
+            'username' => env('SFTP_USER','root'),
+            'password' => env('SFTP_PWD'),
+            'root' => env('SFTP_PATH','/data/backup/')*/
+
             'host' => '47.91.198.97',
             'username' => 'root',
             'password' => '233HHdyc',
