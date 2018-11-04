@@ -64,6 +64,23 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'sftp' => [
+            'driver' => 'sftp',
+            'host' => '47.91.198.97',
+            'username' => 'root',
+            'password' => '233HHdyc',
+            'root' => '/data/backup/'
+
+            // 基于 SSH 密钥的身份验证设置...
+            // 'privateKey' => '/path/to/privateKey',
+            // 'password' => 'encryption-password',
+
+            // 可选的 SFTP 配置...
+            // 'port' => 22,
+            // 'root' => '',
+            // 'timeout' => 30,
+        ],
+
     ],
 
 ];
