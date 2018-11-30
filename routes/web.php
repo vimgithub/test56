@@ -23,11 +23,11 @@ Route::get('/{project?}', function (\Illuminate\Http\Request $request){
         '唐宇'    => 'tangyu',
         '翟维'    => 'zhaiwei'
     ];
+
     $project = $request->project ?: 19;
     $status = ['wait','doing','done'];
     $delayedStatus = ['wait','doing'];
-    // SELECT count(status) as num,`status` FROM `zt_task` WHERE (project=19 and assignedTo='zhangyamin' and `status` in('wait','doing','done')) GROUP BY `status` ;
-    // SELECT * FROM `zt_task` WHERE (project=19 and assignedTo='zhangyamin' and `status` in('wait','doing') and `deadline` < CURRENT_DATE() AND deleted='0' ) ;
+
     $tempData = $data = [];
     $job = new \App\Models\Job;
     $db  = new \Illuminate\Support\Facades\DB;
@@ -38,7 +38,6 @@ Route::get('/{project?}', function (\Illuminate\Http\Request $request){
     }
 
     $data = echartData($tempData);
-    //dump($tempData, $data);
 
     return view('welcome', compact('data','users'));
 });
