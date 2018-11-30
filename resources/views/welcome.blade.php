@@ -77,19 +77,182 @@
                 </div>
             @endif
 
-            <div class="content">
+            <div class="content" style="width: 100%">
                 <div class="title m-b-md">
-                    Laravel
+                    统计日期：{{ date('m-d', time()) }}
                 </div>
 
-                <div class="links">
+                {{--<div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>
                     <a href="https://laracasts.com">Laracasts</a>
                     <a href="https://laravel-news.com">News</a>
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
+                </div>--}}
+                <p></p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="job" style="width: 100%;height:600px;"></div>
+                    </div>
                 </div>
             </div>
         </div>
+        <script src="{{ asset('/assets/Echarts/echarts.min.js') }}"></script>
+        <script type="application/javascript">
+            var job = echarts.init(document.getElementById('job'));
+           var posList = [
+                'left', 'right', 'top', 'bottom',
+                'inside',
+                'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+                'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+            ];
+
+            job.configParameters = {
+                rotate: {
+                    min: -90,
+                    max: 90
+                },
+                align: {
+                    options: {
+                        left: 'left',
+                        center: 'center',
+                        right: 'right'
+                    }
+                },
+                verticalAlign: {
+                    options: {
+                        top: 'top',
+                        middle: 'middle',
+                        bottom: 'bottom'
+                    }
+                },
+                position: {
+                    options: echarts.util.reduce(posList, function (map, pos) {
+                        map[pos] = pos;
+                        return map;
+                    }, {})
+                },
+                distance: {
+                    min: 0,
+                    max: 100
+                }
+            };
+
+            job.config = {
+                rotate: 90,
+                align: 'left',
+                verticalAlign: 'middle',
+                position: 'insideBottom',
+                distance: 15,
+                onChange: function () {
+                    var labelOption = {
+                        normal: {
+                            rotate: job.config.rotate,
+                            align: job.config.align,
+                            verticalAlign: job.config.verticalAlign,
+                            position: job.config.position,
+                            distance: job.config.distance
+                        }
+                    };
+                    myChart.setOption({
+                        series: [{
+                            label: labelOption
+                        }, {
+                            label: labelOption
+                        }, {
+                            label: labelOption
+                        }, {
+                            label: labelOption
+                        }]
+                    });
+                }
+            };
+
+
+           /* var labelOption = {
+                normal: {
+                    show: true,
+                    position: job.config.position,
+                    distance: job.config.distance,
+                    align: job.config.align,
+                    verticalAlign: job.config.verticalAlign,
+                    rotate: job.config.rotate,
+                    formatter: '{c}  {name|{a}}',
+                    fontSize: 16,
+                    rich: {
+                        name: {
+                            textBorderColor: '#fff'
+                        }
+                    }
+                }
+            };*/
+
+            var jobOption = {
+                color: ['gray', 'blue', 'green', 'red'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['未开始', '进行中', '已完成', '延期']
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    left: 'right',
+                    top: 'center',
+                    feature: {
+                        mark: {show: true},
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisTick: {show: false},
+                        data: [@foreach($users as $name => $user) '{{ $name }}', @endforeach]
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '未开始',
+                        type: 'bar',
+                        barGap: 0,
+                        label: jobOption,
+                        data: [@foreach($data['wait'] as $wait) {{ $wait }}, @endforeach]
+                    },
+                    {
+                        name: '进行中',
+                        type: 'bar',
+                        label: jobOption,
+                        data: [@foreach($data['doing'] as $doing) {{ $doing }}, @endforeach]
+                    },
+                    {
+                        name: '已完成',
+                        type: 'bar',
+                        label: jobOption,
+                        data: [@foreach($data['done'] as $done) {{ $done }}, @endforeach]
+                    },
+                    {
+                        name: '延期',
+                        type: 'bar',
+                        label: jobOption,
+                        data: [@foreach($data['delayed'] as $delayed) {{ $delayed }}, @endforeach]
+                    }
+                ]
+            };
+            job.setOption(jobOption);
+        </script>
     </body>
 </html>
