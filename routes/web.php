@@ -11,33 +11,34 @@
 |
 */
 
-Route::get('/', function (){
+Route::get('/{project?}', function (\Illuminate\Http\Request $request){
     $users = [
-        '张亚敏'    => 'zhangyamin',
-        '杨长青' => 'yangchangqing',
-        '乔俊颖'   => 'qiaojunying',
-        '安亚琼'     => 'anyaqiong',
-        '姚心杰'     => 'yaoxinjie',
-        '吴昊'         => 'wuhao',
-        '代玮'        => 'daiwei',
-        '唐宇'        => 'tangyu',
-        '翟维'       => 'zhaiwei'
+        '张亚敏'  => 'zhangyamin',
+        '杨长青'  => 'yangchangqing',
+        '乔俊颖'  => 'qiaojunying',
+        '安亚琼'  => 'anyaqiong',
+        '姚心杰'  => 'yaoxinjie',
+        '吴昊'    => 'wuhao',
+        '代玮'    => 'daiwei',
+        '唐宇'    => 'tangyu',
+        '翟维'    => 'zhaiwei'
     ];
-    $project = 19;
+    $project = $request->project ?: 19;
     $status = ['wait','doing','done'];
     $delayedStatus = ['wait','doing'];
     // SELECT count(status) as num,`status` FROM `zt_task` WHERE (project=19 and assignedTo='zhangyamin' and `status` in('wait','doing','done')) GROUP BY `status` ;
-    //  SELECT * FROM `zt_task` WHERE (project=19 and assignedTo='zhangyamin' and `status` in('wait','doing') and `deadline` < CURRENT_DATE() AND deleted='0' ) ;
+    // SELECT * FROM `zt_task` WHERE (project=19 and assignedTo='zhangyamin' and `status` in('wait','doing') and `deadline` < CURRENT_DATE() AND deleted='0' ) ;
     $tempData = $data = [];
     $job = new \App\Models\Job;
     $db  = new \Illuminate\Support\Facades\DB;
+
     foreach ($users as $name => $user ) {
         $tempData[$name] = userByStauts($project, $user, $status, $job, $db);
         $tempData[$name]['delayed'] = userBydelayed($project, $user, $delayedStatus, $job);
     }
 
     $data = echartData($tempData);
-    dump($tempData, $data);
+    //dump($tempData, $data);
 
     return view('welcome', compact('data','users'));
 });
