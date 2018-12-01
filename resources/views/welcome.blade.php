@@ -79,7 +79,7 @@
 
             <div class="content" style="width: 100%">
                 <div class="title m-b-md">
-                    统计日期：{{ date('m-d', time()) }}
+                    {{ $flag == 'task' ? '任务-' : 'Bug-' }}统计日期：{{ date('m-d', time()) }}
                 </div>
 
                 {{--<div class="links">
