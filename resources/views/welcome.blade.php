@@ -100,7 +100,7 @@
         <script src="{{ asset('/assets/Echarts/echarts.min.js') }}"></script>
         <script type="application/javascript">
             var job = echarts.init(document.getElementById('job'));
-           var posList = [
+            var posList = [
                 'left', 'right', 'top', 'bottom',
                 'inside',
                 'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
@@ -188,7 +188,7 @@
             };*/
 
             var jobOption = {
-                color: ['gray', 'blue', 'green', 'red'],
+                color: ['#2f4554', '#d48265', '#61a0a8', '#c23531'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -196,7 +196,7 @@
                     }
                 },
                 legend: {
-                    data: ['未开始', '进行中', '已完成', '延期']
+                    data: [@if($flag == 'task') '未开始', '进行中', '已完成', '延期', @elseif($flag == 'bug') '未解决','已解决','已关闭','延期' @endif]
                 },
                 toolbox: {
                     show: true,
@@ -225,31 +225,61 @@
                     }
                 ],
                 series: [
-                    {
-                        name: '未开始',
-                        type: 'bar',
-                        barGap: 0,
-                        label: jobOption,
-                        data: [@foreach($data['wait'] as $wait) {{ $wait }}, @endforeach]
-                    },
-                    {
-                        name: '进行中',
-                        type: 'bar',
-                        label: jobOption,
-                        data: [@foreach($data['doing'] as $doing) {{ $doing }}, @endforeach]
-                    },
-                    {
-                        name: '已完成',
-                        type: 'bar',
-                        label: jobOption,
-                        data: [@foreach($data['done'] as $done) {{ $done }}, @endforeach]
-                    },
-                    {
-                        name: '延期',
-                        type: 'bar',
-                        label: jobOption,
-                        data: [@foreach($data['delayed'] as $delayed) {{ $delayed }}, @endforeach]
-                    }
+                    @if($flag == 'task')
+                        {
+                            name: '未开始',
+                            type: 'bar',
+                            barGap: 0,
+                            label: jobOption,
+                            data: [@foreach($data['wait'] as $wait) {{ $wait }}, @endforeach]
+                        },
+                        {
+                            name: '进行中',
+                            type: 'bar',
+                            label: jobOption,
+                            data: [@foreach($data['doing'] as $doing) {{ $doing }}, @endforeach]
+                        },
+                        {
+                            name: '已完成',
+                            type: 'bar',
+                            label: jobOption,
+                            data: [@foreach($data['done'] as $done) {{ $done }}, @endforeach]
+                        },
+                        {
+                            name: '延期',
+                            type: 'bar',
+                            label: jobOption,
+                            data: [@foreach($data['delayed'] as $delayed) {{ $delayed }}, @endforeach]
+                        },
+                    @elseif($flag == 'bug')
+                        {
+                            name: '未解决',
+                            type: 'bar',
+                            barGap: 0,
+                            label: jobOption,
+                            data: [@foreach($data['active'] as $active) {{ $active }}, @endforeach]
+                        },
+                        {
+                            name: '已解决',
+                            type: 'bar',
+                            label: jobOption,
+                            data: [@foreach($data['resolved'] as $resolved) {{ $resolved }}, @endforeach]
+                        },
+                        {
+                            name: '已关闭',
+                            type: 'bar',
+                            label: jobOption,
+                            data: [@foreach($data['closed'] as $closed) {{ $closed }}, @endforeach]
+                        },
+                        {
+                            name: '延期',
+                            type: 'bar',
+                            label: jobOption,
+                            data: [@foreach($data['delayed'] as $delayed) {{ $delayed }}, @endforeach]
+                        }
+
+                    @endif
+
                 ]
             };
             job.setOption(jobOption);
