@@ -54,7 +54,7 @@ Route::get('/bug/{project?}', function (\Illuminate\Http\Request $request){
     }
 
     $data = echartData($tempData, $flag);
-dump(compact('data','users','flag'));
+
     return view('welcome', compact('data','users','flag'));
 });
 
