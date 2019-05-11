@@ -151,6 +151,8 @@ return [
          * Package Service Providers...
          */
         Spatie\Backup\BackupServiceProvider::class,
+        Way\Generators\GeneratorsServiceProvider::class,
+        Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
 
         /*
          * Application Service Providers...
